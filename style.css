@@ -1,0 +1,90 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background: pink;
+}
+.header {
+  height: 10vh;
+  background: cornflowerblue;
+}
+.card {
+  height: 45vh;
+  background: lightblue;
+  border: 1px solid black;
+  display: inline-flex;
+  justify-content: center;
+  position: relative;
+  border: 3px solid green;
+}
+.item {
+  width: 100px;
+  height: 100px;
+  border: 1px solid black;
+  border-radius: 50%;
+  align-content: center;
+  text-align: center;
+}
+.item-button {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translatetX(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid blue;
+  background: white;
+  opacity: 0.4;
+  cursor: pointer;
+}
+.btn1 {
+  width: 23%;
+  height: 23%;
+  left: 15%;
+  top: 5%;
+}
+.btn2 {
+  top: 13%;
+  left: 50%;
+  width: 29%;
+  height: 29%;
+}
+.btn3 {
+  top: 11%;
+  left: 80%;
+  width: 19%;
+  height: 19%;
+}
+.btn4 {
+  top: 38%;
+  left: 18%;
+  width: 17%;
+  height: 17%;
+}
+.btn5 {
+  top: 53%;
+  left: 43%;
+  width: 16%;
+  height: 16%;
+}
+.btn6 {
+  top: 45%;
+  left: 80%;
+  width: 29%;
+  height: 29%;
+}
+.btn7 {
+  top: 67%;
+  left: 19%;
+  width: 22%;
+  height: 22%;
+}
+.btn8 {
+  top: 74%;
+  left: 58%;
+  width: 19%;
+  height: 19%;
+}

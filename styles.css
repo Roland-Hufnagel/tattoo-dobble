@@ -1,0 +1,64 @@
+body {
+  background: pink;
+  padding: 0;
+  margin: 0;
+}
+.image {
+  width: 100%;
+  height: auto;
+}
+.btn {
+  border-radius: 50%;
+  border: 3px solid blue;
+  position: absolute;
+  height: auto;
+  opacity: 0.4;
+}
+.img1 {
+  background: cornflowerblue;
+  position: relative;
+  max-width: 47vw;
+  height: 95vh;
+}
+.img2 {
+  background: cornflowerblue;
+  position: relative;
+  max-width: 47vw;
+  height: 95vh;
+}
+.playground {
+  display: flex;
+  gap: 10px;
+  border: 2px solid green;
+}
+
+
+.board {
+  display: flex;
+  gap: 10px;
+  flex-direction: row; /* Standard: nebeneinander */
+  width: calc(100vw - 15px);
+  height: calc(100vh - 15px);
+}
+
+/* Jede Karte bekommt gleich viel Platz */
+.card {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: green;
+}
+
+/* Die Bilder passen sich maximal an, ohne zu verzerren */
+.card img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+@media (orientation: portrait) {
+  .board {
+    flex-direction: column; /* Untereinander im Portrait */
+  }
+}
