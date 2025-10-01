@@ -4,7 +4,7 @@ const btn1 = document.querySelector(".btn1");
 const btn2 = document.querySelector(".btn2");
 const header = document.querySelector(".header");
 const cards = document.querySelectorAll(".card");
-
+const teamA = document.querySelector(".teamA");
 let buttonA = null;
 let buttonB = null;
 
@@ -49,7 +49,7 @@ function checkWin() {
       console.log("Wrong!");
       //playWrong();
       playSound("/public/sounds/no.ogg");
-      
+
       header.textContent = "Try again! ❌";
       setTimeout(() => {
         header.textContent = ``;
@@ -65,8 +65,32 @@ function clearSelection() {
   buttonB = null;
 }
 
-
 function playSound(file) {
   const audio = new Audio(file);
   audio.play();
 }
+const SIZES = {
+  S: "30px",
+  M: "50px",
+  L: "70px",
+};
+
+const templates = [
+  {
+    size: SIZES.L,
+    x: "25%",
+    y: "25%",
+  },
+];
+const ids = [3];
+
+ids.forEach((id, index) => {
+  const button = document.createElement("button");
+  button.style.background = `url('./public/img${id}.png')`;
+  button.classList.add("play-button");
+  button.style.width = templates[index].size;
+  button.style.height = templates[index].size;
+  button.style.top = templates[index].y;
+  button.style.left = templates[index].x;
+  teamA.append(button);
+});
