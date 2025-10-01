@@ -8,7 +8,8 @@ body {
 }
 .header {
   height: 10vh;
-  background: cornflowerblue;
+  width: 100%;
+  font-size: 24px;
 }
 .card {
   height: 45vh;
@@ -18,6 +19,7 @@ body {
   justify-content: center;
   position: relative;
   border: 3px solid green;
+  margin: 0 auto;
 }
 .item {
   width: 100px;
@@ -29,62 +31,120 @@ body {
 }
 .item-button {
   position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translatetX(-50%);
-  width: 40px;
-  height: 40px;
   border-radius: 50%;
-  border: 3px solid blue;
   background: white;
-  opacity: 0.4;
+  opacity: 0;
   cursor: pointer;
+  -border: 2px solid black;
+}
+.active {
+  background-color: #6da8f2;
+  opacity: 0.2;
+  border: none;
 }
 .btn1 {
-  width: 23%;
-  height: 23%;
-  left: 15%;
-  top: 5%;
+  top: 64%;
+  left: 3%;
+  width: 25%;
+  height: 25%;
+  background: url("./public/img1.png");
 }
 .btn2 {
-  top: 13%;
-  left: 50%;
-  width: 29%;
-  height: 29%;
+  top: 11%;
+  left: 35%;
+  width: 32%;
+  height: 32%;
 }
 .btn3 {
-  top: 11%;
-  left: 80%;
-  width: 19%;
-  height: 19%;
+  top: 10%;
+  left: 69%;
+  width: 21%;
+  height: 21%;
 }
 .btn4 {
   top: 38%;
-  left: 18%;
+  left: 9%;
   width: 17%;
   height: 17%;
 }
 .btn5 {
-  top: 53%;
-  left: 43%;
-  width: 16%;
-  height: 16%;
+  top: 52%;
+  left: 34%;
+  width: 18%;
+  height: 18%;
 }
 .btn6 {
   top: 45%;
-  left: 80%;
+  left: 65%;
   width: 29%;
   height: 29%;
 }
 .btn7 {
   top: 67%;
-  left: 19%;
+  left: 8%;
   width: 22%;
   height: 22%;
 }
 .btn8 {
   top: 74%;
-  left: 58%;
+  left: 48%;
   width: 19%;
   height: 19%;
+}
+.btn11 {
+  top: 12%;
+  left: 5%;
+  width: 23%;
+  height: 23%;
+}
+.btn12 {
+  top: 16%;
+  left: 36%;
+  width: 12%;
+  height: 12%;
+}
+.btn13 {
+  top: 11%;
+  left: 60%;
+  width: 30%;
+  height: 30%;
+}
+.btn14 {
+  top: 40%;
+  left: 6%;
+  width: 25%;
+  height: 25%;
+}
+.btn15 {
+  top: 34%;
+  left: 38%;
+  width: 18%;
+  height: 18%;
+}
+.btn16 {
+  top: 46%;
+  left: 64%;
+  width: 16%;
+  height: 16%;
+}
+.btn17 {
+  top: 59%;
+  left: 25%;
+  width: 32%;
+  height: 32%;
+}
+.btn18 {
+  top: 68%;
+  left: 66%;
+  width: 13%;
+  height: 13%;
+}
+.btn100 {
+  opacity: 1;
+  width: 180px;
+  height: 180px;
+  background: url("./public/img3.png");
+  background-size: cover;
+
+  cursor: pointer;
 }
