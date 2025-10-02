@@ -107,7 +107,7 @@ function createPlayButton(id, index, template) {
 // --- control functions ---
 
 function checkItemA(event) {
-  playSound("/public/sounds/tick.flac");
+  playSound("./public/sounds/tick.flac");
   buttonA?.classList.remove("active");
   buttonA = event.target;
   buttonA.classList.add("active");
@@ -116,7 +116,7 @@ function checkItemA(event) {
 }
 
 function checkItemB(event) {
-  playSound("/public/sounds/tick.flac");
+  playSound("./public/sounds/tick.flac");
   buttonB?.classList.remove("active");
   buttonB = event.target;
   buttonB.classList.add("active");
@@ -128,7 +128,7 @@ function checkMatch() {
   if (buttonA && buttonB) {
     // Match YES:
     if (buttonA?.dataset.id === buttonB?.dataset.id) {
-      playSound("/public/sounds/yes.wav");
+      playSound("./public/sounds/yes.wav");
       field.style.backgroundColor = "black";
       points++;
       performance.mark("match");
@@ -147,7 +147,7 @@ function checkMatch() {
       }, 300);
       // Natch NO:
     } else {
-      playSound("/public/sounds/no.ogg");
+      playSound("./public/sounds/no.ogg");
     }
     setTimeout(clearSelection, 500);
   }
