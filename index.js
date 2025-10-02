@@ -21,13 +21,13 @@ startButton.addEventListener("click", () => {
 
 // --- States ---
 
-const roundValues = [1, 2, 3, 15, 20, 25];
+const roundValues = [3, 5, 10, 15, 20, 25];
 let buttonA = null;
 let buttonB = null;
 let points = 0;
-let rounds = 1; // default value should be 5
+let rounds = 3; // default value should be 5
 const deck = getRandomDeck();
-const performanceMarks = [];
+let performanceMarks = [];
 
 // --- Prepare Settings ---
 roundValues.forEach((value, index) => {
@@ -70,6 +70,7 @@ function startTrainingGame() {
 // --- New Cards ---
 
 function newCards() {
+
   if (deck.length >= 2) {
     teamA.innerHTML = "";
     const template1 = getRandomTemplate();
@@ -110,7 +111,7 @@ function checkItemA(event) {
   buttonA?.classList.remove("active");
   buttonA = event.target;
   buttonA.classList.add("active");
-  console.log(buttonA?.dataset.id + " - " + buttonB?.dataset.id);
+  // console.log(buttonA?.dataset.id + " - " + buttonB?.dataset.id);
   checkMatch();
 }
 
@@ -119,7 +120,7 @@ function checkItemB(event) {
   buttonB?.classList.remove("active");
   buttonB = event.target;
   buttonB.classList.add("active");
-  console.log(buttonA?.dataset.id + " - " + buttonB?.dataset.id);
+  // console.log(buttonA?.dataset.id + " - " + buttonB?.dataset.id);
   checkMatch();
 }
 
@@ -132,7 +133,6 @@ function checkMatch() {
       points++;
       performance.mark("match");
       const p = performance.measure("match duration", "start", "match");
-      console.log("p: ", p);
       performanceMarks.push(p);
       if (points >= rounds) {
         endGame();
@@ -163,7 +163,6 @@ function clearSelection() {
 // --- End Game ---
 
 function endGame() {
-  console.log("GAME OVER");
   snowConfetti();
   output.textContent = `YOU WIN!`;
   stats.classList.remove("hidden");
@@ -171,14 +170,15 @@ function endGame() {
     field.classList.add("hidden");
     overview.classList.remove("hidden");
   }, 4000);
+  points = 0;
   calculateStats();
+  performanceMarks = [];
 }
 
 function calculateStats() {
   performanceMarks.sort((a, b) => {
     a.duration - b.duration;
   });
-  console.log("performanceMarks: ", performanceMarks);
   fastestRound.textContent = `${formatSeconds(
     performanceMarks[0].duration
   )} sec.`;
