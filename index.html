@@ -5,12 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="index.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="field">
+    <canvas id="confetti-canvas"></canvas>
+    <div class="field hidden">
       <div class="half teamA"></div>
       <div class="half teamB"></div>
+      <div class="output">0</div>
+    </div>
+    <div class="overview">
+      <h1>Welcome to TATTOO DOBBLE</h1>
+      <div class="button-container">
+        <button class="start-button" id="training">TRAINING</button>
+        <button disabled class="start-button" id="challenge">CHALLENGE</button>
+      </div>
+      <div class="settings" id="settings">
+        Settings
+        <p>Rounds:</p>
+        <div id="rounds-container" class="rounds-container"></div>
+      </div>
     </div>
   </body>
 </html>

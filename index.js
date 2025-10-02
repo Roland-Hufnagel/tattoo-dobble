@@ -1,63 +1,151 @@
-import { getRandomDeck } from "./data.js";
-import { playCorrect, playWrong } from "./audio.js";
-const btn1 = document.querySelector(".btn1");
-const btn2 = document.querySelector(".btn2");
-const header = document.querySelector(".header");
-const cards = document.querySelectorAll(".card");
+import { getRandomDeck, getRandomTemplate } from "./data.js";
+
+// --- DOM Nodes ---
+const roundsContainer = document.getElementById("rounds-container");
 const teamA = document.querySelector(".teamA");
+const teamB = document.querySelector(".teamB");
+const field = document.querySelector(".field");
+const overview = document.querySelector(".overview");
+const output = document.querySelector(".output");
+const startButton = document.getElementById("training");
+
+// --- EventListener ---
+
+startButton.addEventListener("click", () => {
+  startTrainingGame();
+});
+
+// --- States ---
+
+const roundValues = [1, 5, 10, 15, 20, 25];
 let buttonA = null;
 let buttonB = null;
+let points = 0;
+let rounds = 1; // default value should be 5
+const deck = getRandomDeck();
+const performanceMarks = [];
 
-const img1 = document.createElement("img");
-img1.src = "/public/img1.png";
-img1.classList.add("image");
-
-const img2 = document.createElement("img");
-img2.src = "/public/img2.png";
-img2.classList.add("image");
-
-const aButtons = document.querySelectorAll(".a");
-aButtons.forEach((btn) => {
-  btn.addEventListener("click", checkItemA);
+// --- Prepare Settings ---
+roundValues.forEach((value, index) => {
+  const button = document.createElement("button");
+  button.classList.add("round-button");
+  if (index === 0) {
+    button.classList.add("round-button--active");
+  }
+  button.textContent = value;
+  button.addEventListener("click", (event) => {
+    removeActive();
+    event.target.classList.add("round-button--active");
+    rounds = value;
+  });
+  roundsContainer.append(button);
 });
-const bButtons = document.querySelectorAll(".b");
-bButtons.forEach((btn) => {
-  btn.addEventListener("click", checkItemB);
-});
+
+function removeActive() {
+  const roundButtons = document.querySelectorAll(".round-button");
+  roundButtons.forEach((button) =>
+    button.classList.remove("round-button--active")
+  );
+}
+
+// --- Start Training ---
+
+function startTrainingGame() {
+  // Reset
+  buttonA = null;
+  buttonB = null;
+  field.classList.remove("hidden");
+  overview.classList.add("hidden");
+  field.style.opacity = 1;
+  field.style.backgroundColor = "white";
+  output.textContent = "0";
+  performance.mark("start");
+  newCards();
+}
+
+// --- New Cards ---
+
+function newCards() {
+  if (deck.length >= 2) {
+    teamA.innerHTML = "";
+    const template1 = getRandomTemplate();
+    deck.pop().forEach((id, index) => {
+      const button = createPlayButton(id, index, template1);
+      button.addEventListener("click", checkItemA);
+      teamA.append(button);
+    });
+
+    teamB.innerHTML = "";
+    const template2 = getRandomTemplate();
+    deck.pop().forEach((id, index) => {
+      const button = createPlayButton(id, index, template2);
+      button.addEventListener("click", checkItemB);
+      teamB.append(button);
+    });
+  } else {
+    endGame();
+  }
+}
+
+function createPlayButton(id, index, template) {
+  const button = document.createElement("button");
+  button.style.backgroundImage = `url('./public/images/img${id}.png')`;
+  button.classList.add("play-button");
+  button.style.height = template[index].size;
+  button.style.width = template[index].size;
+  button.style.top = template[index].y;
+  button.style.left = template[index].x;
+  button.dataset.id = id;
+  return button;
+}
+
+// --- control functions ---
+
 function checkItemA(event) {
+  playSound("/public/sounds/tick.flac");
   buttonA?.classList.remove("active");
   buttonA = event.target;
   buttonA.classList.add("active");
   console.log(buttonA?.dataset.id + " - " + buttonB?.dataset.id);
-  checkWin();
+  checkMatch();
 }
+
 function checkItemB(event) {
+  playSound("/public/sounds/tick.flac");
   buttonB?.classList.remove("active");
   buttonB = event.target;
   buttonB.classList.add("active");
   console.log(buttonA?.dataset.id + " - " + buttonB?.dataset.id);
-  checkWin();
+  checkMatch();
 }
-function checkWin() {
-  if (buttonA && buttonB) {
-    if (buttonA?.dataset.id === buttonB?.dataset.id) {
-      console.log("You win!!!");
-      // playCorrect();
-      playSound("/public/sounds/yes.wav");
-      header.textContent = "You found a match! 🎉";
-    } else {
-      console.log("Wrong!");
-      //playWrong();
-      playSound("/public/sounds/no.ogg");
 
-      header.textContent = "Try again! ❌";
+function checkMatch() {
+  if (buttonA && buttonB) {
+    // Match YES:
+    if (buttonA?.dataset.id === buttonB?.dataset.id) {
+      playSound("/public/sounds/yes.wav");
+      field.style.backgroundColor = "black";
+      points++;
+
+      if (points >= rounds) {
+        endGame();
+        return;
+      }
+      field.style.opacity = 0;
       setTimeout(() => {
-        header.textContent = ``;
-      }, 1000);
+        newCards();
+        output.textContent = `${points}`;
+        field.style.backgroundColor = "white";
+        field.style.opacity = 1;
+      }, 300);
+      // Natch NO:
+    } else {
+      playSound("/public/sounds/no.ogg");
     }
     setTimeout(clearSelection, 500);
   }
 }
+
 function clearSelection() {
   buttonA?.classList.remove("active");
   buttonB?.classList.remove("active");
@@ -65,32 +153,46 @@ function clearSelection() {
   buttonB = null;
 }
 
+// --- End Game ---
+
+function endGame() {
+  console.log("GAME OVER");
+  snowConfetti();
+  output.textContent = `YOU WIN!`;
+  field.classList.add("fadeout");
+  setTimeout(() => {
+    field.classList.add("hidden");
+    overview.classList.remove("hidden");
+  }, 4000);
+}
+
+// --- Audio ---
+
 function playSound(file) {
   const audio = new Audio(file);
   audio.play();
 }
-const SIZES = {
-  S: "30px",
-  M: "50px",
-  L: "70px",
-};
+// --- Confetti  from CDN ---
+function snowConfetti() {
+  const end = Date.now() + 1 * 1000; // Dauer: 1 Sekunde
 
-const templates = [
-  {
-    size: SIZES.L,
-    x: "25%",
-    y: "25%",
-  },
-];
-const ids = [3];
+  (function frame() {
+    // zufällige Konfettischüsse von links & rechts
+    confetti({
+      particleCount: 5,
+      angle: -20,
+      spread: 55,
+      origin: { x: 0, y: 0 },
+    });
+    confetti({
+      particleCount: 5,
+      angle: 200,
+      spread: 55,
+      origin: { x: 1, y: 0 },
+    });
 
-ids.forEach((id, index) => {
-  const button = document.createElement("button");
-  button.style.background = `url('./public/img${id}.png')`;
-  button.classList.add("play-button");
-  button.style.width = templates[index].size;
-  button.style.height = templates[index].size;
-  button.style.top = templates[index].y;
-  button.style.left = templates[index].x;
-  teamA.append(button);
-});
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  })();
+}
