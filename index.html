@@ -18,14 +18,28 @@
     <div class="overview">
       <h1>Welcome to TATTOO DOBBLE</h1>
       <div class="button-container">
-        <button class="start-button" id="training">TRAINING</button>
-        <button disabled class="start-button" id="challenge">CHALLENGE</button>
+        <button class="start-button" id="training">START</button>
       </div>
-      <div class="settings" id="settings">
+      <section class="settings" id="settings">
         Settings
         <p>Rounds:</p>
         <div id="rounds-container" class="rounds-container"></div>
-      </div>
+      </section>
+      <section id="stats" class="stats settings hidden">
+        Statistics
+        <section class="stats-section">
+          <p>Fastest Match:</p>
+          <p id="fastest"></p>
+        </section>
+        <section class="stats-section">
+          <p>Slowest Match:</p>
+          <p id="slowest"></p>
+        </section>
+        <section class="stats-section">
+          <p>Average Match:</p>
+          <p id="average"></p>
+        </section>
+      </section>
     </div>
   </body>
 </html>

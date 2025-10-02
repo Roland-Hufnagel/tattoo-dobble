@@ -8,6 +8,10 @@ const field = document.querySelector(".field");
 const overview = document.querySelector(".overview");
 const output = document.querySelector(".output");
 const startButton = document.getElementById("training");
+const stats = document.querySelector(".stats");
+const fastestRound = document.getElementById("fastest");
+const slowestRound = document.getElementById("slowest");
+const averageRound = document.getElementById("average");
 
 // --- EventListener ---
 
@@ -17,7 +21,7 @@ startButton.addEventListener("click", () => {
 
 // --- States ---
 
-const roundValues = [1, 5, 10, 15, 20, 25];
+const roundValues = [1, 2, 3, 15, 20, 25];
 let buttonA = null;
 let buttonB = null;
 let points = 0;
@@ -126,7 +130,10 @@ function checkMatch() {
       playSound("/public/sounds/yes.wav");
       field.style.backgroundColor = "black";
       points++;
-
+      performance.mark("match");
+      const p = performance.measure("match duration", "start", "match");
+      console.log("p: ", p);
+      performanceMarks.push(p);
       if (points >= rounds) {
         endGame();
         return;
@@ -159,11 +166,39 @@ function endGame() {
   console.log("GAME OVER");
   snowConfetti();
   output.textContent = `YOU WIN!`;
-  field.classList.add("fadeout");
+  stats.classList.remove("hidden");
   setTimeout(() => {
     field.classList.add("hidden");
     overview.classList.remove("hidden");
   }, 4000);
+  calculateStats();
+}
+
+function calculateStats() {
+  performanceMarks.sort((a, b) => {
+    a.duration - b.duration;
+  });
+  console.log("performanceMarks: ", performanceMarks);
+  fastestRound.textContent = `${formatSeconds(
+    performanceMarks[0].duration
+  )} sec.`;
+  slowestRound.textContent = `${formatSeconds(
+    performanceMarks[performanceMarks.length - 1].duration
+  )} sec.`;
+  averageRound.textContent = `${formatSeconds(
+    performanceMarks.reduce((a, b) => {
+      return a + b.duration;
+    }, 0) / performanceMarks.length
+  )} sec.`;
+}
+
+// --- Helper Functions ---
+
+function formatSeconds(value) {
+  return (value / 1000).toLocaleString("de-DE", {
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3,
+  });
 }
 
 // --- Audio ---
