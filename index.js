@@ -63,14 +63,13 @@ function startTrainingGame() {
   field.style.opacity = 1;
   field.style.backgroundColor = "white";
   output.textContent = "0";
-  performance.mark("start");
+  performance.mark("lap-0");
   newCards();
 }
 
 // --- New Cards ---
 
 function newCards() {
-
   if (deck.length >= 2) {
     teamA.innerHTML = "";
     const template1 = getRandomTemplate();
@@ -131,8 +130,12 @@ function checkMatch() {
       playSound("./public/sounds/yes.wav");
       field.style.backgroundColor = "black";
       points++;
-      performance.mark("match");
-      const p = performance.measure("match duration", "start", "match");
+      performance.mark(`lap-${points}`);
+      const p = performance.measure(
+        "match duration",
+        `lap-${points - 1}`,
+        `lap-${points}`
+      );
       performanceMarks.push(p);
       if (points >= rounds) {
         endGame();
@@ -176,20 +179,20 @@ function endGame() {
 }
 
 function calculateStats() {
-  performanceMarks.sort((a, b) => {
-    a.duration - b.duration;
+  const sortedMarks = performanceMarks.toSorted((a, b) => {
+    return a.duration - b.duration;
   });
-  fastestRound.textContent = `${formatSeconds(
-    performanceMarks[0].duration
-  )} sec.`;
+  fastestRound.textContent = `${formatSeconds(sortedMarks[0].duration)} sec.`;
   slowestRound.textContent = `${formatSeconds(
-    performanceMarks[performanceMarks.length - 1].duration
+    sortedMarks[sortedMarks.length - 1].duration
   )} sec.`;
   averageRound.textContent = `${formatSeconds(
-    performanceMarks.reduce((a, b) => {
+    sortedMarks.reduce((a, b) => {
       return a + b.duration;
-    }, 0) / performanceMarks.length
+    }, 0) / sortedMarks.length
   )} sec.`;
+  console.log("performanceMarks: ", performanceMarks);
+  console.log("sortedMarks: ", sortedMarks);
 }
 
 // --- Helper Functions ---
