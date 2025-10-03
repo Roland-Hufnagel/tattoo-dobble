@@ -4,7 +4,6 @@ import {
   playWrongSound,
   playMatchSound,
   playWinSound,
-  unlockAudioContext,
 } from "./audio.js";
 
 // --- Preloads ---
@@ -31,9 +30,22 @@ const averageRound = document.getElementById("average");
 // --- EventListener ---
 
 document.body.addEventListener("click", unlockAudioContext);
+function unlockAudioContext() {
+  // 1️⃣ AudioContext erstellen (mobilfreundlich)
+  // const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  // const audioCtx = new AudioContextClass();
+
+  if (audioCtx.state === "suspended") {
+    console.log("Yes, it is suspended: ");
+
+    audioCtx.resume();
+    console.log("audioCtx: ", audioCtx);
+  }
+  document.body.removeEventListener("click", unlockAudioContext);
+}
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 startButton.addEventListener("click", () => {
-  // unlockAudioContext();
   startTrainingGame();
 });
 
