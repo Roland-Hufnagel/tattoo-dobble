@@ -1,7 +1,7 @@
 import { getRandomDeck, getRandomTemplate } from "./data.js";
 
 // --- Preloads ---
-const tickSound = new Audio("./public/sounds/tick.flac");
+const tickSound = new Audio("./public/sounds/click.wav");
 tickSound.preload = "auto";
 const yesSound = new Audio("./public/sounds/yes.wav");
 yesSound.preload = "auto";
