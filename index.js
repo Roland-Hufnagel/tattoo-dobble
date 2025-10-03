@@ -177,7 +177,7 @@ function endGame() {
   calculateStats();
   performanceMarks = [];
 }
-
+ 
 function calculateStats() {
   const sortedMarks = performanceMarks.toSorted((a, b) => {
     return a.duration - b.duration;
