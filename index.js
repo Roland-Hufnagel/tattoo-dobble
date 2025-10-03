@@ -28,22 +28,23 @@ const slowestRound = document.getElementById("slowest");
 const averageRound = document.getElementById("average");
 
 // --- EventListener ---
-
+let audioCtx;
 document.body.addEventListener("click", unlockAudioContext);
+document.body.addEventListener("touchstart", unlockAudioContext);
 function unlockAudioContext() {
   // 1️⃣ AudioContext erstellen (mobilfreundlich)
   // const AudioContextClass = window.AudioContext || window.webkitAudioContext;
   // const audioCtx = new AudioContextClass();
-
-  if (audioCtx.state === "suspended") {
-    console.log("Yes, it is suspended: ");
-
-    audioCtx.resume();
-    console.log("audioCtx: ", audioCtx);
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+  playMatchSound();
   document.body.removeEventListener("click", unlockAudioContext);
+  document.body.removeEventListener("touchstart", unlockAudioContext);
 }
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 startButton.addEventListener("click", () => {
   startTrainingGame();
