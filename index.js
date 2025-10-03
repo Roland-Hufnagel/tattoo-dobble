@@ -1,4 +1,10 @@
 import { getRandomDeck, getRandomTemplate } from "./data.js";
+import {
+  playClickSound,
+  playWrongSound,
+  playMatchSound,
+  playWinSound,
+} from "./audio.js";
 
 // --- Preloads ---
 const tickSound = new Audio("./public/sounds/click.wav");
@@ -29,11 +35,11 @@ startButton.addEventListener("click", () => {
 
 // --- States ---
 
-const roundValues = [3, 5, 10, 15, 20, 25];
+const roundValues = [1, 3, 5, 10, 15, 20, 25];
 let buttonA = null;
 let buttonB = null;
 let points = 0;
-let rounds = 3; // default value should be 5
+let rounds = 1; // default value should be 5
 const deck = getRandomDeck();
 let performanceMarks = [];
 
@@ -114,7 +120,6 @@ function createPlayButton(id, index, template) {
 // --- control functions ---
 
 function checkItemA(event) {
-  playSound(tickSound);
   buttonA?.classList.remove("active");
   buttonA = event.target;
   buttonA.classList.add("active");
@@ -123,7 +128,6 @@ function checkItemA(event) {
 }
 
 function checkItemB(event) {
-  playSound(tickSound);
   buttonB?.classList.remove("active");
   buttonB = event.target;
   buttonB.classList.add("active");
@@ -132,10 +136,10 @@ function checkItemB(event) {
 }
 
 function checkMatch() {
+  // Falls ein button noch undefined ist, dann raus und click sound
   if (buttonA && buttonB) {
     // Match YES:
     if (buttonA?.dataset.id === buttonB?.dataset.id) {
-      playSound(yesSound);
       field.style.backgroundColor = "black";
       points++;
       performance.mark(`lap-${points}`);
@@ -149,6 +153,8 @@ function checkMatch() {
         endGame();
         return;
       }
+      // Falls match vorliegt, dann match sound
+      playMatchSound();
       field.style.opacity = 0;
       setTimeout(() => {
         newCards();
@@ -156,11 +162,17 @@ function checkMatch() {
         field.style.backgroundColor = "white";
         field.style.opacity = 1;
       }, 300);
+      setTimeout(clearSelection, 500);
+      return;
       // Natch NO:
     } else {
-      playSound(noSound);
+      // playSound(noSound);
+      playWrongSound();
+      setTimeout(clearSelection, 500);
+      return;
     }
-    setTimeout(clearSelection, 500);
+  } else {
+    playClickSound();
   }
 }
 
@@ -174,6 +186,8 @@ function clearSelection() {
 // --- End Game ---
 
 function endGame() {
+  // playWinSound();
+  playSound(yesSound);
   snowConfetti();
   output.textContent = `YOU WIN!`;
   stats.classList.remove("hidden");

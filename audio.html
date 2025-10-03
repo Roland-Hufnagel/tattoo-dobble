@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="clickBtn">Klick mich</button>
+
+    <script>
+      // 1️⃣ AudioContext erstellen (mobilfreundlich)
+      const AudioContextClass =
+        window.AudioContext || window.webkitAudioContext;
+      const audioCtx = new AudioContextClass();
+
+      // Funktion, um AudioContext bei User-Interaction zu aktivieren
+      function unlockAudioContext() {
+        if (audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+        document.body.removeEventListener("click", unlockAudioContext);
+      }
+      document.body.addEventListener("click", unlockAudioContext);
+
+      // 2️⃣ Funktion für den Klicksound
+      function playClickSound() {
+        const oscillator = audioCtx.createOscillator(); // Tonquelle
+        const gainNode = audioCtx.createGain(); // Lautstärkesteuerung
+
+        oscillator.type = "sine"; // kurzer, unaufdringlicher Sound -> guter klick mit frequenz
+        // oscillator.type = 'square';   // kurzer, unaufdringlicher Sound
+        // oscillator.type = 'triangle';   // kurzer, unaufdringlicher Sound
+        // oscillator.type = "sawtooth"; // kurzer, unaufdringlicher Sound
+        oscillator.frequency.setValueAtTime(600, audioCtx.currentTime); // Tonhöhe in Hz
+
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // sehr leise starten
+        gainNode.gain.exponentialRampToValueAtTime(
+          0.001,
+          audioCtx.currentTime + 0.1
+        ); // schnell ausblenden
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        oscillator.start(audioCtx.currentTime);
+        oscillator.stop(audioCtx.currentTime + 0.1); // sehr kurzer Ton
+      }
+
+      // 3️⃣ Event Listener für Button
+      document.getElementById("clickBtn").addEventListener("click", () => {
+        playClickSound();
+      });
+    </script>
+  </body>
+</html>
