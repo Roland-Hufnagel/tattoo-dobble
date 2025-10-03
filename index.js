@@ -30,8 +30,10 @@ const averageRound = document.getElementById("average");
 
 // --- EventListener ---
 
+document.body.addEventListener("click", unlockAudioContext);
+
 startButton.addEventListener("click", () => {
-  unlockAudioContext();
+  // unlockAudioContext();
   startTrainingGame();
 });
 

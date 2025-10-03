@@ -9,9 +9,12 @@ const audioCtx = new AudioContextClass();
 // Funktion, um AudioContext bei User-Interaction zu aktivieren
 export function unlockAudioContext() {
   if (audioCtx.state === "suspended") {
+    console.log("Yes, it is suspended: ");
+
     audioCtx.resume();
+    console.log("audioCtx: ", audioCtx);
   }
-  // document.body.removeEventListener("click", unlockAudioContext);
+  document.body.removeEventListener("click", unlockAudioContext);
 }
 // document.body.addEventListener("click", unlockAudioContext);
 
