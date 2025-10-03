@@ -2,11 +2,13 @@
   /* <button id="clickBtn">Klick mich</button> */
 }
 
+// 1️⃣ AudioContext erstellen (mobilfreundlich)
+const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+const audioCtx = new AudioContextClass();
+
 // Funktion, um AudioContext bei User-Interaction zu aktivieren
 export function unlockAudioContext() {
-  // 1️⃣ AudioContext erstellen (mobilfreundlich)
-  // const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-  // const audioCtx = new AudioContextClass();
+
   
   if (audioCtx.state === "suspended") {
     console.log("Yes, it is suspended: ");

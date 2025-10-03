@@ -29,8 +29,8 @@ const averageRound = document.getElementById("average");
 
 // --- EventListener ---
 let audioCtx;
-document.body.addEventListener("click", unlockAudioContext);
-document.body.addEventListener("touchstart", unlockAudioContext);
+// document.body.addEventListener("click", unlockAudioContext);
+// document.body.addEventListener("touchstart", unlockAudioContext);
 function unlockAudioContext() {
   // 1️⃣ AudioContext erstellen (mobilfreundlich)
   // const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -42,12 +42,14 @@ function unlockAudioContext() {
     audioCtx.resume();
   }
   playMatchSound();
-  document.body.removeEventListener("click", unlockAudioContext);
-  document.body.removeEventListener("touchstart", unlockAudioContext);
+  // document.body.removeEventListener("click", unlockAudioContext);
+  // document.body.removeEventListener("touchstart", unlockAudioContext);
 }
 
 startButton.addEventListener("click", () => {
   startTrainingGame();
+  unlockAudioContext();
+  output.textContent = audioCtx?.state;
 });
 
 // --- States ---
