@@ -7,13 +7,13 @@ const AudioContextClass = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContextClass();
 
 // Funktion, um AudioContext bei User-Interaction zu aktivieren
-function unlockAudioContext() {
+export function unlockAudioContext() {
   if (audioCtx.state === "suspended") {
     audioCtx.resume();
   }
-  document.body.removeEventListener("click", unlockAudioContext);
+  // document.body.removeEventListener("click", unlockAudioContext);
 }
-document.body.addEventListener("click", unlockAudioContext);
+// document.body.addEventListener("click", unlockAudioContext);
 
 // 2️⃣ Funktion für den Klicksound
 export function playClickSound() {
@@ -63,7 +63,7 @@ export function playMatchSound() {
   // Musikintervalle (C5-Pentatonik, typische Zauberstab-Folge)
   const frequencies = [523, 659, 783, 987, 1319]; // Hz
   const duration = 0.04; // Dauer pro Ton
-  const gap = 0.00; // Pause zwischen Tönen
+  const gap = 0.0; // Pause zwischen Tönen
 
   for (let i = 0; i < frequencies.length; i++) {
     const osc = audioCtx.createOscillator();
@@ -133,22 +133,22 @@ export function playWinSound() {
 
   // Gesamtlautstärke GainNode
   const gainNode = audioCtx.createGain();
-  gainNode.gain.setValueAtTime(0.05, now);        // leise starten
-  gainNode.gain.linearRampToValueAtTime(0.2, now + 0.2);  // Crescendo
+  gainNode.gain.setValueAtTime(0.05, now); // leise starten
+  gainNode.gain.linearRampToValueAtTime(0.2, now + 0.2); // Crescendo
   gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.9); // sanft ausblenden
   gainNode.connect(audioCtx.destination);
 
   // Basisfrequenzen für Fanfare (mehrstimmig, 3 Stimmen)
   const baseFrequencies = [
-    [440, 554, 659],   // Stimme 1
-    [349, 440, 523],   // Stimme 2
-    [392, 494, 587]    // Stimme 3
+    [440, 554, 659], // Stimme 1
+    [349, 440, 523], // Stimme 2
+    [392, 494, 587], // Stimme 3
   ];
 
   baseFrequencies.forEach((freqs, idx) => {
     freqs.forEach((f, i) => {
       const osc = audioCtx.createOscillator();
-      osc.type = 'sine';
+      osc.type = "sine";
       osc.frequency.setValueAtTime(f, now + i * 0.1 + idx * 0.02); // leichte Verschiebung pro Stimme
       osc.connect(gainNode);
       osc.start(now + i * 0.1 + idx * 0.02);

@@ -4,6 +4,7 @@ import {
   playWrongSound,
   playMatchSound,
   playWinSound,
+  unlockAudioContext,
 } from "./audio.js";
 
 // --- Preloads ---
@@ -30,6 +31,7 @@ const averageRound = document.getElementById("average");
 // --- EventListener ---
 
 startButton.addEventListener("click", () => {
+  unlockAudioContext();
   startTrainingGame();
 });
 
