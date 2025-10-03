@@ -1,24 +1,37 @@
-{
-  /* <button id="clickBtn">Klick mich</button> */
-}
-
 // 1️⃣ AudioContext erstellen (mobilfreundlich)
 const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-const audioCtx = new AudioContextClass();
+let audioCtx = new AudioContextClass();
+
+const soundBuffers = {};
+
+export async function preloadSound(name, url) {
+  const response = await fetch(url);
+  const arrayBuffer = await response.arrayBuffer();
+  soundBuffers[name] = await audioCtx.decodeAudioData(arrayBuffer);
+  console.log("sounds preloaded");
+  // return soundBuffers;
+}
+
+export function playSound(name) {
+  const source = audioCtx.createBufferSource();
+  source.buffer = soundBuffers[name];
+  source.connect(audioCtx.destination);
+  source.start();
+}
 
 // Funktion, um AudioContext bei User-Interaction zu aktivieren
-export function unlockAudioContext() {
-
-  
-  if (audioCtx.state === "suspended") {
-    console.log("Yes, it is suspended: ");
-
-    audioCtx.resume();
-    console.log("audioCtx: ", audioCtx);
+export async function unlockAudioContext() {
+  // 1️⃣ AudioContext erstellen (mobilfreundlich)
+  if (!audioCtx) {
+    const AudioContextClass =
+      window.AudioContext || window["webkitAudioContext"];
+    audioCtx = new AudioContextClass();
   }
-  document.body.removeEventListener("click", unlockAudioContext);
+  if (audioCtx.state === "suspended") {
+    await audioCtx.resume();
+  }
+  playMatchSound();
 }
-// document.body.addEventListener("click", unlockAudioContext);
 
 // 2️⃣ Funktion für den Klicksound
 export function playClickSound() {

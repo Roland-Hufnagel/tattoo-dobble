@@ -3,16 +3,17 @@ import {
   playClickSound,
   playWrongSound,
   playMatchSound,
-  playWinSound,
+  unlockAudioContext,
+  preloadSound,
+  playSound,
 } from "./audio.js";
+import { preloadImages } from "./images.js";
 
 // --- Preloads ---
-const tickSound = new Audio("./public/sounds/click.wav");
-tickSound.preload = "auto";
-const yesSound = new Audio("./public/sounds/yes.wav");
-yesSound.preload = "auto";
-const noSound = new Audio("./public/sounds/no.ogg");
-noSound.preload = "auto";
+preloadImages().then(() => {
+  console.log("Alle Bilder vorgeladen!");
+});
+preloadSound("winSound", "./public/sounds/yes.wav");
 
 // --- DOM Nodes ---
 const roundsContainer = document.getElementById("rounds-container");
@@ -28,32 +29,13 @@ const slowestRound = document.getElementById("slowest");
 const averageRound = document.getElementById("average");
 
 // --- EventListener ---
-let audioCtx;
-// document.body.addEventListener("click", unlockAudioContext);
-// document.body.addEventListener("touchstart", unlockAudioContext);
-async function unlockAudioContext() {
-  // 1️⃣ AudioContext erstellen (mobilfreundlich)
-  if (!audioCtx) {
-    const AudioContextClass = window.AudioContext || window["webkitAudioContext"];
-    audioCtx = new AudioContextClass();
-  }
-  if (audioCtx.state === "suspended") {
-    await audioCtx.resume();
-  }
-  playMatchSound();
-  // document.body.removeEventListener("click", unlockAudioContext);
-  // document.body.removeEventListener("touchstart", unlockAudioContext);
-}
-
 startButton.addEventListener("click", async () => {
   startTrainingGame();
   await unlockAudioContext();
-  output.textContent = audioCtx?.state;
 });
 
 // --- States ---
-
-const roundValues = [1, 3, 5, 10, 15, 20, 25];
+const roundValues = [1, 3, 10, 15, 20, 25];
 let buttonA = null;
 let buttonB = null;
 let points = 0;
@@ -85,7 +67,6 @@ function removeActive() {
 }
 
 // --- Start Training ---
-
 function startTrainingGame() {
   // Reset
   buttonA = null;
@@ -100,7 +81,6 @@ function startTrainingGame() {
 }
 
 // --- New Cards ---
-
 function newCards() {
   if (deck.length >= 2) {
     teamA.innerHTML = "";
@@ -141,7 +121,6 @@ function checkItemA(event) {
   buttonA?.classList.remove("active");
   buttonA = event.target;
   buttonA.classList.add("active");
-  // console.log(buttonA?.dataset.id + " - " + buttonB?.dataset.id);
   checkMatch();
 }
 
@@ -149,12 +128,10 @@ function checkItemB(event) {
   buttonB?.classList.remove("active");
   buttonB = event.target;
   buttonB.classList.add("active");
-  // console.log(buttonA?.dataset.id + " - " + buttonB?.dataset.id);
   checkMatch();
 }
 
 function checkMatch() {
-  // Falls ein button noch undefined ist, dann raus und click sound
   if (buttonA && buttonB) {
     // Match YES:
     if (buttonA?.dataset.id === buttonB?.dataset.id) {
@@ -171,7 +148,6 @@ function checkMatch() {
         endGame();
         return;
       }
-      // Falls match vorliegt, dann match sound
       playMatchSound();
       field.style.opacity = 0;
       setTimeout(() => {
@@ -184,7 +160,6 @@ function checkMatch() {
       return;
       // Natch NO:
     } else {
-      // playSound(noSound);
       playWrongSound();
       setTimeout(clearSelection, 500);
       return;
@@ -202,17 +177,15 @@ function clearSelection() {
 }
 
 // --- End Game ---
-
 function endGame() {
-  // playWinSound();
-  playSound(yesSound);
+  playSound("winSound");
   snowConfetti();
   output.textContent = `YOU WIN!`;
   stats.classList.remove("hidden");
   setTimeout(() => {
     field.classList.add("hidden");
     overview.classList.remove("hidden");
-  }, 4000);
+  }, 3500);
   points = 0;
   calculateStats();
   performanceMarks = [];
@@ -231,12 +204,9 @@ function calculateStats() {
       return a + b.duration;
     }, 0) / sortedMarks.length
   )} sec.`;
-  console.log("performanceMarks: ", performanceMarks);
-  console.log("sortedMarks: ", sortedMarks);
 }
 
 // --- Helper Functions ---
-
 function formatSeconds(value) {
   return (value / 1000).toLocaleString("de-DE", {
     minimumFractionDigits: 3,
@@ -245,19 +215,20 @@ function formatSeconds(value) {
 }
 
 // --- Audio ---
-
-// function playSound(file) {
-//   const audio = new Audio(file);
-//   audio.play();
+// function playSound(sound) {
+//   sound.currentTime = 0;
+//   sound.play();
 // }
-function playSound(sound) {
-  // Für mehrfaches Abspielen schnell hintereinander
-  sound.currentTime = 0;
-  sound.play();
-}
+// function playSound(name) {
+//   const source = audioCtx.createBufferSource();
+//   source.buffer = soundBuffers[name];
+//   source.connect(audioCtx.destination);
+//   source.start();
+// }
+
 // --- Confetti  from CDN ---
 function snowConfetti() {
-  const end = Date.now() + 1 * 1000; // Dauer: 1 Sekunde
+  const end = Date.now() + 1 * 700; // Dauer: 0.7 Sekunde
 
   (function frame() {
     // zufällige Konfettischüsse von links & rechts
