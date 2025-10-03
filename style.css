@@ -12,7 +12,7 @@ body {
 }
 .field {
   height: 100dvh;
-  width: 100%;
+  width: 100dvw;
   display: flex;
   flex-wrap: wrap;
   transition: opacity 0.3s ease-in-out, background-color 0.3s ease-in-out;
