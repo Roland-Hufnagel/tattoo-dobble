@@ -31,24 +31,23 @@ const averageRound = document.getElementById("average");
 let audioCtx;
 // document.body.addEventListener("click", unlockAudioContext);
 // document.body.addEventListener("touchstart", unlockAudioContext);
-function unlockAudioContext() {
+async function unlockAudioContext() {
   // 1️⃣ AudioContext erstellen (mobilfreundlich)
-  // const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-  // const audioCtx = new AudioContextClass();
   if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const AudioContextClass = window.AudioContext || window["webkitAudioContext"];
+    audioCtx = new AudioContextClass();
   }
   if (audioCtx.state === "suspended") {
-    audioCtx.resume();
+    await audioCtx.resume();
   }
   playMatchSound();
   // document.body.removeEventListener("click", unlockAudioContext);
   // document.body.removeEventListener("touchstart", unlockAudioContext);
 }
 
-startButton.addEventListener("click", () => {
+startButton.addEventListener("click", async () => {
   startTrainingGame();
-  unlockAudioContext();
+  await unlockAudioContext();
   output.textContent = audioCtx?.state;
 });
 
