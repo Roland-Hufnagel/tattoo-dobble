@@ -1,5 +1,13 @@
 import { getRandomDeck, getRandomTemplate } from "./data.js";
 
+// --- Preloads ---
+const tickSound = new Audio("./public/sounds/tick.flac");
+tickSound.preload = "auto";
+const yesSound = new Audio("./public/sounds/yes.wav");
+yesSound.preload = "auto";
+const noSound = new Audio("./public/sounds/no.ogg");
+noSound.preload = "auto";
+
 // --- DOM Nodes ---
 const roundsContainer = document.getElementById("rounds-container");
 const teamA = document.querySelector(".teamA");
@@ -106,7 +114,7 @@ function createPlayButton(id, index, template) {
 // --- control functions ---
 
 function checkItemA(event) {
-  playSound("./public/sounds/tick.flac");
+  playSound(tickSound);
   buttonA?.classList.remove("active");
   buttonA = event.target;
   buttonA.classList.add("active");
@@ -115,7 +123,7 @@ function checkItemA(event) {
 }
 
 function checkItemB(event) {
-  playSound("./public/sounds/tick.flac");
+  playSound(tickSound);
   buttonB?.classList.remove("active");
   buttonB = event.target;
   buttonB.classList.add("active");
@@ -127,7 +135,7 @@ function checkMatch() {
   if (buttonA && buttonB) {
     // Match YES:
     if (buttonA?.dataset.id === buttonB?.dataset.id) {
-      playSound("./public/sounds/yes.wav");
+      playSound(yesSound);
       field.style.backgroundColor = "black";
       points++;
       performance.mark(`lap-${points}`);
@@ -150,7 +158,7 @@ function checkMatch() {
       }, 300);
       // Natch NO:
     } else {
-      playSound("./public/sounds/no.ogg");
+      playSound(noSound);
     }
     setTimeout(clearSelection, 500);
   }
@@ -177,7 +185,7 @@ function endGame() {
   calculateStats();
   performanceMarks = [];
 }
- 
+
 function calculateStats() {
   const sortedMarks = performanceMarks.toSorted((a, b) => {
     return a.duration - b.duration;
@@ -206,9 +214,14 @@ function formatSeconds(value) {
 
 // --- Audio ---
 
-function playSound(file) {
-  const audio = new Audio(file);
-  audio.play();
+// function playSound(file) {
+//   const audio = new Audio(file);
+//   audio.play();
+// }
+function playSound(sound) {
+  // Für mehrfaches Abspielen schnell hintereinander
+  sound.currentTime = 0;
+  sound.play();
 }
 // --- Confetti  from CDN ---
 function snowConfetti() {
