@@ -77,10 +77,15 @@ export const deck = [
 
 // --- templates ---
 
+// const SIZES = {
+//   S: "19%",
+//   M: "27%",
+//   L: "35%",
+// };
 const SIZES = {
-  S: "19%",
+  S: "27%",
   M: "27%",
-  L: "35%",
+  L: "37%",
 };
 
 const templates = [
