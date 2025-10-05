@@ -186,7 +186,7 @@ function endGame() {
   setTimeout(() => {
     field.classList.add("hidden");
     overview.classList.remove("hidden");
-  }, 3500);
+  }, 4000);
   points = 0;
   calculateStats();
   performanceMarks = [];
@@ -229,7 +229,7 @@ function formatSeconds(value) {
 
 // --- Confetti  from CDN ---
 function snowConfetti() {
-  const end = Date.now() + 1 * 700; // Dauer: 0.7 Sekunde
+  const end = Date.now() + 1 * 400; // Dauer: 0.7 Sekunde
 
   (function frame() {
     // zufällige Konfettischüsse von links & rechts
