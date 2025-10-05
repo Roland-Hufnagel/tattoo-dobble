@@ -7,7 +7,7 @@ const preloadedImages = [];
 export async function preloadImages() {
   const imagePaths = Array.from(
     { length: 57 },
-    (_, i) => `./public/images/img${i + 1}.png`
+    (_, i) => `./public/images/dogs/img${i + 1}.png`
   );
   return Promise.all(
     imagePaths.map((path) => {

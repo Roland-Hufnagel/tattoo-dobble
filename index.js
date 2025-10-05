@@ -42,6 +42,7 @@ let points = 0;
 let rounds = 1; // default value should be 5
 const deck = getRandomDeck();
 let performanceMarks = [];
+let theme = "dogs"; // default theme
 
 // --- Prepare Settings ---
 roundValues.forEach((value, index) => {
@@ -105,7 +106,7 @@ function newCards() {
 
 function createPlayButton(id, index, template) {
   const button = document.createElement("button");
-  button.style.backgroundImage = `url('./public/images/img${id}.png')`;
+  button.style.backgroundImage = `url('./public/images/${theme}/img${id}.png')`;
   button.classList.add("play-button");
   button.style.height = template[index].size;
   button.style.width = template[index].size;
