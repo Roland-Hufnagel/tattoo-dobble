@@ -77,17 +77,30 @@ export const deck = [
 
 // --- templates ---
 
-// const SIZES = {
-//   S: "19%",
-//   M: "27%",
-//   L: "35%",
-// };
 const SIZES = {
-  S: "37%",
-  M: "37%",
-  L: "37%",
+  S: "19%",
+  M: "27%",
+  L: "35%",
 };
+// const SIZES = {
+//   S: "37%",
+//   M: "37%",
+//   L: "37%",
+// };
 
+const templates2 = [
+  [
+    { x: "33%", y: "17%", size: SIZES.M },
+    { x: "67%", y: "17%", size: SIZES.L },
+
+    { x: "17%", y: "50%", size: SIZES.M },
+    { x: "50%", y: "50%", size: SIZES.M },
+    { x: "83%", y: "50%", size: SIZES.S },
+
+    { x: "33%", y: "83%", size: SIZES.S },
+    { x: "67%", y: "83%", size: SIZES.L },
+  ],
+];
 const templates = [
   [
     { x: "18%", y: "24%", size: SIZES.M },

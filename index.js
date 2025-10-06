@@ -106,7 +106,7 @@ function newCards() {
 
 function createPlayButton(id, index, template) {
   const button = document.createElement("button");
-  button.style.backgroundImage = `url('./public/images/${theme}/img${id}.png')`;
+  button.style.backgroundImage = `url('./public/images/img${id}.png')`;
   button.classList.add("play-button");
   button.style.height = template[index].size;
   button.style.width = template[index].size;
